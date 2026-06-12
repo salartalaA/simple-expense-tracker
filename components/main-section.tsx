@@ -2,7 +2,6 @@
 
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { Expenses } from "@/components/expenses";
 import {
   Select,
   SelectContent,
@@ -11,8 +10,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import type { Expense } from "@/types/expense";
+import Expenses from "./expenses";
 
-export default function MainSection() {
+export default function MainSection({
+  allExpenses,
+}: {
+  allExpenses: Expense[];
+}) {
   const [filteredExpenses, setFilteredExpenses] = useState<
     string | undefined
   >();
@@ -57,7 +62,7 @@ export default function MainSection() {
           </SelectContent>
         </Select>
       </div>
-      <Expenses filteredExpenses={filteredExpenses} />
+      <Expenses expenses={allExpenses} filteredExpenses={filteredExpenses} />
     </>
   );
 }

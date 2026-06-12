@@ -1,6 +1,6 @@
 import { AddExpenseDialog } from "./add-expense-dialog";
 
-export default function Header() {
+export default function Header({ expensesLength }: { expensesLength: number }) {
   return (
     <>
       <div className="mb-8 flex items-center justify-between">
@@ -16,7 +16,9 @@ export default function Header() {
         <div className="mb-5 flex items-center justify-between">
           <h2 className="font-semibold text-lg">
             All Expenses
-            <span className="ml-2 font-normal text-[#676f7e] text-sm">(8)</span>
+            <span className="ml-2 font-normal text-[#676f7e] text-sm">
+              ({expensesLength})
+            </span>
           </h2>
         </div>
       </div>

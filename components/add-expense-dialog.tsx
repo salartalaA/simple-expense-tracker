@@ -2,6 +2,7 @@
 
 import { GraduationCap, Plus, Receipt, Utensils } from "lucide-react";
 import { useState } from "react";
+import { createExpense } from "@/actions/expense";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,17 +20,17 @@ import { cn } from "@/lib/utils";
 export function AddExpenseDialog() {
   const categories = [
     {
-      id: "food",
+      id: "cmqbfo7460000yohu39g4ynf7",
       label: "Food",
       icon: Utensils,
     },
     {
-      id: "education",
+      id: "cmqbfo8oa0001yohud3hof7mc",
       label: "Education",
       icon: GraduationCap,
     },
     {
-      id: "bills",
+      id: "cmqbfo8u60002yohugjryeh4l",
       label: "Bills",
       icon: Receipt,
     },
@@ -37,15 +38,16 @@ export function AddExpenseDialog() {
 
   const [openState, setOpenState] = useState(false);
 
-  const [activeCategory, setActiveCategory] =
-    useState<(typeof categories)[number]["id"]>("food");
+  const [activeCategory, setActiveCategory] = useState<
+    (typeof categories)[number]["id"]
+  >("cmqbfo7460000yohu39g4ynf7");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
 
-    console.log(Object.fromEntries(formData.entries()));
+    await createExpense(formData);
 
     setOpenState(false);
   };
@@ -89,7 +91,7 @@ export function AddExpenseDialog() {
                   form="add-expense-form"
                   id="amount"
                   name="amount"
-                  placeholder="0.00"
+                  placeholder="0"
                   required
                   type="number"
                 />
