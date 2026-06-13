@@ -137,7 +137,7 @@ export default function MainSection({
 
   return (
     <>
-      <div className="flex gap-3">
+      <div className="gap-3 md:flex">
         <div className="w-full">
           <div className="flex w-full items-center rounded-lg border-2 border-[#e3e5e8] py-1">
             <Search className="ml-3 text-[#676f7e]" size={16} />
@@ -149,33 +149,35 @@ export default function MainSection({
           </div>
         </div>
 
-        <Select defaultValue="all" onValueChange={setSelectCategory}>
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Sort by Category" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="all">All Categories</SelectItem>
-              <SelectItem value="food">Food</SelectItem>
-              <SelectItem value="education">Education</SelectItem>
-              <SelectItem value="bills">Bills</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <div className="mt-4 flex gap-3 md:mt-0">
+          <Select defaultValue="all" onValueChange={setSelectCategory}>
+            <SelectTrigger className="w-full md:w-40">
+              <SelectValue placeholder="Sort by Category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="all">All Categories</SelectItem>
+                <SelectItem value="food">Food</SelectItem>
+                <SelectItem value="education">Education</SelectItem>
+                <SelectItem value="bills">Bills</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
-        <Select defaultValue="newest" onValueChange={setSortBy}>
-          <SelectTrigger className="w-40">
-            <SelectValue placeholder="Sort by Date" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="newest">Newest First</SelectItem>
-              <SelectItem value="oldest">Oldest First</SelectItem>
-              <SelectItem value="highest">Highest</SelectItem>
-              <SelectItem value="lowest">Lowest</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          <Select defaultValue="newest" onValueChange={setSortBy}>
+            <SelectTrigger className="w-full md:w-40">
+              <SelectValue placeholder="Sort by Date" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="oldest">Oldest First</SelectItem>
+                <SelectItem value="highest">Highest</SelectItem>
+                <SelectItem value="lowest">Lowest</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <Expenses expenses={displayExpenses} />

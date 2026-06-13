@@ -60,7 +60,8 @@ export function AddExpenseDialog() {
             className="cursor-pointer rounded-xl bg-[#5b42d7] px-8.5 py-5 font-semibold"
             // variant={"default"}
           >
-            <Plus /> Add Expense
+            <Plus />
+            <span className="hidden sm:block">Add Expense</span>
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-md">
