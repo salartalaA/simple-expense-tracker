@@ -57,7 +57,7 @@ export function AddExpenseDialog() {
       <form id="add-expense-form" onSubmit={handleSubmit}>
         <DialogTrigger asChild>
           <Button
-            className="cursor-pointer rounded-xl bg-[#5b42d7] px-9 py-5"
+            className="cursor-pointer rounded-xl bg-[#5b42d7] px-8.5 py-5 font-semibold"
             // variant={"default"}
           >
             <Plus /> Add Expense

@@ -14,14 +14,17 @@ const categoryData: Prisma.CategoryCreateInput[] = [
   {
     name: "Food",
     icon: "Utensils",
+    className: "bg-orange-100 text-orange-600",
   },
   {
     name: "Education",
     icon: "GraduationCap",
+    className: "bg-indigo-100 text-indigo-600",
   },
   {
     name: "Bills",
     icon: "Receipt",
+    className: "bg-red-100 text-red-600",
   },
 ];
 

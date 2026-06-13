@@ -26,6 +26,41 @@ export async function getExpenses() {
     include: {
       category: true,
     },
+    orderBy: {
+      date: "desc",
+    },
+  });
+}
+
+export async function totalExpenses() {
+  return await prisma.expense.aggregate({
+    _sum: {
+      amount: true,
+    },
+  });
+}
+
+const now = new Date();
+const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+export async function thisMonth() {
+  return await prisma.expense.aggregate({
+    where: {
+      date: {
+        gte: firstDayOfMonth,
+      },
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+}
+
+export async function avgExpenses() {
+  return await prisma.expense.aggregate({
+    _avg: {
+      amount: true,
+    },
   });
 }
 

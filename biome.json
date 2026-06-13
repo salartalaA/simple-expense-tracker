@@ -21,13 +21,17 @@
       "suspicious": {
         "noUnknownAtRules": "off",
         "noDoubleEquals": "off",
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noExplicitAny": "off"
       },
       "a11y": {
         "useSemanticElements": "off"
       },
       "complexity": {
         "useLiteralKeys": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off"
       }
     },
     "domains": {
