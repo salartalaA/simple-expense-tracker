@@ -1,6 +1,12 @@
 import { TrendingDown, TrendingUp, Wallet } from "lucide-react";
-import { avgExpenses, thisMonth, totalExpenses } from "@/actions/expense";
+import {
+  avgExpenses,
+  getExpenseByCategory,
+  thisMonth,
+  totalExpenses,
+} from "@/actions/expense";
 import { AddExpenseDialog } from "./add-expense-dialog";
+import { ExpensePieChart } from "./expense-pie-chart";
 import HeaderCard from "./header-card";
 
 export default async function Header({
@@ -36,6 +42,27 @@ export default async function Header({
     },
   ] as const;
 
+  const categories = [
+    {
+      name: "Food",
+      amount: (await getExpenseByCategory("Food"))._sum.amount ?? 0,
+      color: "#fb923c",
+      fill: "#fb923c",
+    },
+    {
+      name: "Bills",
+      amount: (await getExpenseByCategory("Bills"))._sum.amount ?? 0,
+      color: "#dc2626",
+      fill: "#dc2626",
+    },
+    {
+      name: "Education",
+      amount: (await getExpenseByCategory("Education"))._sum.amount ?? 0,
+      color: "#4f46e5",
+      fill: "#4f46e5",
+    },
+  ] as const;
+
   return (
     <>
       <div className="mb-8 flex items-center justify-between">
@@ -60,6 +87,35 @@ export default async function Header({
               title={item.title}
             />
           ))}
+        </div>
+
+        <div className="rounded-xl border bg-card p-6 text-[#14181f] shadow">
+          <h3 className="mb-4 font-semibold text-lg">Spending by Category</h3>
+          <div className="flex flex-col items-center gap-6 sm:flex-row">
+            <ExpensePieChart data={categories} />
+            <div className="w-full flex-1 space-y-2.5">
+              {categories.map((category) => (
+                <div
+                  className="flex items-center justify-between"
+                  key={category.name}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <div
+                      className="h-3 w-3 rounded-full"
+                      style={{
+                        backgroundColor: category.color,
+                      }}
+                    />
+                    <span className="font-medium text-sm">{category.name}</span>
+                  </div>
+
+                  <span className="font-semibold text-sm tabular-nums">
+                    ${category.amount}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 

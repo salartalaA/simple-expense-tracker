@@ -32,6 +32,19 @@ export async function getExpenses() {
   });
 }
 
+export async function getExpenseByCategory(category: string) {
+  return await prisma.expense.aggregate({
+    where: {
+      category: {
+        name: category,
+      },
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+}
+
 export async function totalExpenses() {
   return await prisma.expense.aggregate({
     _sum: {
