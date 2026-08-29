@@ -1,6 +1,8 @@
 "use server";
 
+import crypto from "node:crypto";
 import bcrypt from "bcryptjs";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 
@@ -16,7 +18,7 @@ export async function createUser(formData: FormData) {
   });
 
   if (existedUser) {
-    return console.log("User already exists!");
+    return null;
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -43,24 +45,95 @@ export async function loginUser(formData: FormData) {
   });
 
   if (!user) {
-    return console.log("User not found!");
+    return null;
   }
 
   const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
-    return console.log("Invalid password!");
+    return null;
   }
 
-  console.log("User logged in successfully!", user);
+  const sessionId = crypto.randomUUID();
+
+  const expiresAt = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7);
+
+  await prisma.session.create({
+    data: {
+      id: sessionId,
+      userId: user.id,
+      expiresAt,
+    },
+  });
+
+  const cookieStore = await cookies();
+
+  cookieStore.set("session", sessionId, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    expires: expiresAt,
+    path: "/",
+  });
 
   redirect("/");
 }
 
-export async function getUser(email: string) {
-  return await prisma.user.findUnique({
+export async function getCurrentUser() {
+  const cookieStore = await cookies();
+
+  const sessionId = cookieStore.get("session")?.value;
+
+  if (!sessionId) {
+    return null;
+  }
+
+  const session = await prisma.session.findUnique({
     where: {
-      email,
+      id: sessionId,
+    },
+    include: {
+      user: true,
     },
   });
+
+  if (!session) {
+    return null;
+  }
+
+  if (session.expiresAt < new Date()) {
+    await prisma.session.deleteMany({
+      where: {
+        id: sessionId,
+      },
+    });
+
+    return;
+  }
+
+  return session.user;
+}
+
+export async function logout() {
+  const currentUser = await getCurrentUser();
+
+  if (!currentUser) {
+    return null;
+  }
+
+  const cookieStore = await cookies();
+
+  const sessionId = cookieStore.get("session")?.value;
+
+  const deleteSession = await prisma.session.delete({
+    where: {
+      id: sessionId,
+    },
+  });
+
+  if (deleteSession) {
+    cookieStore.delete("session");
+  }
+
+  redirect("/login");
 }

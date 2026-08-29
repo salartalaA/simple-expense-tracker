@@ -1,6 +1,6 @@
 "use client";
 
-import { GraduationCap, Plus, Receipt, Utensils } from "lucide-react";
+import { GraduationCap, Loader2, Plus, Receipt, Utensils } from "lucide-react";
 import { useState } from "react";
 import { createExpense } from "@/actions/expense";
 import { Button } from "@/components/ui/button";
@@ -38,6 +38,8 @@ export function AddExpenseDialog() {
 
   const [openState, setOpenState] = useState(false);
 
+  const [loading, setLaoding] = useState(false);
+
   const [activeCategory, setActiveCategory] = useState<
     (typeof categories)[number]["id"]
   >("cmqbfo7460000yohu39g4ynf7");
@@ -47,9 +49,13 @@ export function AddExpenseDialog() {
 
     const formData = new FormData(e.currentTarget);
 
+    setLaoding(true);
+
     await createExpense(formData);
 
     setOpenState(false);
+
+    setLaoding(false);
   };
 
   return (
@@ -145,10 +151,17 @@ export function AddExpenseDialog() {
           <DialogFooter>
             <Button
               className="w-full rounded-lg bg-[#5b42d7] py-5 font-semibold text-base"
+              disabled={loading}
               form="add-expense-form"
               type="submit"
             >
-              Add Expense
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <Loader2 className="animate-spin" /> Adding Expense ...
+                </span>
+              ) : (
+                "Add Expense"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

@@ -1,5 +1,8 @@
+"use client";
+
 import * as Icons from "lucide-react";
-import { Trash } from "lucide-react";
+import { Loader2, Trash } from "lucide-react";
+import { useState } from "react";
 import { deleteExpense } from "@/actions/expense";
 import {
   Item,
@@ -25,6 +28,8 @@ function DynamicIcon({ name, className }: { name: string; className: string }) {
 }
 
 export default function Expenses({ expenses }: { expenses: Expense[] }) {
+  const [loading, setLoading] = useState(false);
+
   const dateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
     day: "numeric",
@@ -32,6 +37,7 @@ export default function Expenses({ expenses }: { expenses: Expense[] }) {
   });
 
   const handleDeleteExpense = async (id: string) => {
+    setLoading(true);
     await deleteExpense(id);
   };
 
@@ -71,8 +77,13 @@ export default function Expenses({ expenses }: { expenses: Expense[] }) {
           </ItemContent>
           <p className="font-bold text-lg md:mr-10">${expense.amount}</p>
           <ItemActions onClick={() => handleDeleteExpense(expense.id)}>
-            <Button className="rounded-full" size="icon" variant="ghost">
-              <Trash />
+            <Button
+              className="rounded-full"
+              disabled={loading}
+              size="icon"
+              variant="ghost"
+            >
+              {loading ? <Loader2 className="animte-spin" /> : <Trash />}
             </Button>
           </ItemActions>
         </Item>

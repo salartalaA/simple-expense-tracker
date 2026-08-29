@@ -8,15 +8,18 @@ import {
 import { AddExpenseDialog } from "./add-expense-dialog";
 import { ExpensePieChart } from "./expense-pie-chart";
 import HeaderCard from "./header-card";
+import LogoutButton from "./logout-button";
 
 export default async function Header({
   expensesLength,
+  fullName,
 }: {
   expensesLength: number;
+  fullName: string;
 }) {
-  const allExpensesAmount = (await totalExpenses())._sum.amount;
-  const thisMonthAmount = (await thisMonth())._sum.amount;
-  const avgExpensesAmount = (await avgExpenses())._avg.amount;
+  const allExpensesAmount = (await totalExpenses())?._sum.amount;
+  const thisMonthAmount = (await thisMonth())?._sum.amount;
+  const avgExpensesAmount = (await avgExpenses())?._avg.amount;
 
   const headerCardItems = [
     {
@@ -45,19 +48,19 @@ export default async function Header({
   const categories = [
     {
       name: "Food",
-      amount: (await getExpenseByCategory("Food"))._sum.amount ?? 0,
+      amount: (await getExpenseByCategory("Food"))?._sum.amount ?? 0,
       color: "#fb923c",
       fill: "#fb923c",
     },
     {
       name: "Bills",
-      amount: (await getExpenseByCategory("Bills"))._sum.amount ?? 0,
+      amount: (await getExpenseByCategory("Bills"))?._sum.amount ?? 0,
       color: "#dc2626",
       fill: "#dc2626",
     },
     {
       name: "Education",
-      amount: (await getExpenseByCategory("Education"))._sum.amount ?? 0,
+      amount: (await getExpenseByCategory("Education"))?._sum.amount ?? 0,
       color: "#4f46e5",
       fill: "#4f46e5",
     },
@@ -72,14 +75,21 @@ export default async function Header({
           </h1>
           <p className="mt-1 text-[#676f7e]">Track and manage your spending</p>
         </div>
-        <AddExpenseDialog />
+
+        <div className="flex flex-col items-end gap-2">
+          <div className="flex items-center gap-2">
+            {fullName}
+            <LogoutButton />
+          </div>
+          <AddExpenseDialog />
+        </div>
       </div>
 
       <div className="space-y-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           {headerCardItems.map((item) => (
             <HeaderCard
-              amount={item.amount}
+              amount={item.amount ?? 0}
               customIcon={
                 <item.customIcon className={item.className} size={20} />
               }

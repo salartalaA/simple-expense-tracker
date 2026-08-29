@@ -12,8 +12,21 @@ model User {
   fullName  String
   email     String   @unique
   password  String
+
+  sessions  Session[]
+  expenses  Expense[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+}
+
+model Session {
+  id         String  @id
+
+  userId     String
+  user       User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  expiresAt  DateTime
 }
 
 model Expense {
@@ -21,10 +34,14 @@ model Expense {
   title      String
   amount     Int
   date       DateTime
+
   categoryId String
+  userId     String
+
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   category   Category @relation(fields: [categoryId], references: [id])
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model Category {
